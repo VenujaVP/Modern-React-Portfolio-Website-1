@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
+import useAnimateOnScroll, { fadeInUpVariants, staggerChildrenVariants, scaleInVariants } from '../hooks/useAnimateOnScroll'
 
 const PRIMARY_GREEN = '#6DBE45'
-const DARK_GREEN = '#204E27'
 
 function About() {
   const containerRef = useRef(null)
@@ -12,10 +11,13 @@ function About() {
     offset: ["start end", "end start"]
   })
 
+  const { ref: contentRef, controls: contentControls } = useAnimateOnScroll()
+  const { ref: timelineRef, controls: timelineControls } = useAnimateOnScroll(0.15)
+  const { ref: valuesRef, controls: valuesControls } = useAnimateOnScroll(0.1)
+
   // Parallax and color transition effects
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
-  
+
   const highlights = [
     { text: 'Developer', icon: '💻' },
     { text: 'Designer', icon: '🎨' },
@@ -66,25 +68,25 @@ function About() {
       icon: '🎯',
       title: 'Innovation',
       description: 'Pushing boundaries with creative solutions',
-      color: PRIMARY_GREEN
+      color: 'linear-gradient(135deg, #6DBE45 0%, #204E27 100%)'
     },
     {
       icon: '⭐',
       title: 'Excellence',
       description: 'Committed to delivering premium quality',
-      color: PRIMARY_GREEN
+      color: 'linear-gradient(135deg, #204E27 0%, #6DBE45 100%)'
     },
     {
       icon: '🚀',
       title: 'Growth',
       description: 'Continuous learning and improvement',
-      color: PRIMARY_GREEN
+      color: 'linear-gradient(135deg, #6DBE45 0%, #204E27 100%)'
     },
     {
       icon: '⚡',
       title: 'Efficiency',
       description: 'Building trust through reliable delivery',
-      color: PRIMARY_GREEN
+      color: 'linear-gradient(135deg, #204E27 0%, #6DBE45 100%)'
     }
   ]
 
@@ -110,28 +112,34 @@ function About() {
       <div className="relative px-2 mx-auto max-w-7xl sm:px-4 lg:px-6">
         {/* Main Content */}
         <motion.div 
+          ref={contentRef}
+          variants={staggerChildrenVariants}
+          initial="hidden"
+          animate={contentControls}
           className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          key={contentControls ? "visible" : "hidden"}
         >
           {/* Left Column */}
-          <div className="space-y-12">
+          <motion.div 
+            className="space-y-12" 
+            variants={fadeInUpVariants}
+            key={contentControls ? "visible" : "hidden"}
+          >
             {/* About Header */}
-            <motion.div
-              initial={{ x: -50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="mb-6 text-5xl font-bold text-white">
-                About <span className={`text-[${PRIMARY_GREEN}]`}>Me</span>
-              </h2>
+            <div>
+              <motion.h2 
+                className="mb-6 text-5xl font-bold text-white"
+                variants={fadeInUpVariants}
+              >
+                About <span className="text-[#6DBE45]">Me</span>
+              </motion.h2>
 
               {/* Interactive Video Card */}
               <motion.div 
                 className="relative overflow-hidden aspect-video rounded-xl group"
+                variants={scaleInVariants}
                 whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
+                key={contentControls ? "visible" : "hidden"}
               >
                 <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 to-transparent" />
                 <video
@@ -154,17 +162,19 @@ function About() {
                   <p className="text-white/80">Watch how I turned my passion into profession</p>
                 </motion.div>
               </motion.div>
-            </motion.div>
+            </div>
 
             {/* Animated Highlights */}
-            <div className="flex flex-wrap gap-4">
-              {highlights.map(({ text, icon }, index) => (
+            <motion.div 
+              className="flex flex-wrap gap-4"
+              variants={staggerChildrenVariants}
+              key={contentControls ? "visible" : "hidden"}
+            >
+              {highlights.map(({ text, icon }) => (
                 <motion.div
-                  key={text}
+                  key={`${text}-${contentControls ? "visible" : "hidden"}`}
                   className="group"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.2 }}
+                  variants={fadeInUpVariants}
                   whileHover={{ scale: 1.05 }}
                 >
                   <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full
@@ -174,88 +184,142 @@ function About() {
                   </div>
                 </motion.div>
               ))}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          {/* Right Column */}
-          <div className="space-y-12">
-            {/* Interactive Timeline */}
-            <div className="relative w-full">
-              <h3 className="mb-8 text-3xl font-bold text-white">My Journey</h3>
-              <div className="relative ml-6 md:ml-8">
-                {timeline.map((item, index) => (
-                  <motion.div
-                    key={item.year}
-                    className="relative pb-12 pl-8 border-l-2 border-[#6DBE45]/30 last:pb-0"
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.2 }}
+          {/* Right Column - Timeline */}
+          <motion.div 
+            ref={timelineRef}
+            variants={staggerChildrenVariants}
+            initial="hidden"
+            animate={timelineControls}
+            className="space-y-12"
+            key={timelineControls ? "visible" : "hidden"}
+          >
+            <h3 className="mb-8 text-3xl font-bold text-white">My Journey</h3>
+            <div className="relative ml-6 md:ml-8">
+              {timeline.map((item, index) => (
+                <motion.div
+                  key={`${item.year}-${timelineControls ? "visible" : "hidden"}`}
+                  className="relative pb-12 pl-8 border-l-2 border-[#6DBE45]/30 last:pb-0"
+                  variants={fadeInUpVariants}
+                  custom={index}
+                >
+                  <div 
+                    className="absolute left-0 p-3 -translate-x-1/2 bg-[#1A1A1A] rounded-full 
+                      border-2 border-[#6DBE45] transition-all duration-300 hover:scale-110"
                   >
-                    <motion.div 
-                      className="absolute left-0 p-3 -translate-x-1/2 bg-[#1A1A1A] rounded-full 
-                        border-2 border-[#6DBE45]"
-                      whileHover={{ scale: 1.2, rotate: 360 }}
-                    >
-                      <span className="text-xl">{item.icon}</span>
-                    </motion.div>
-                    <div className="p-4 transition-all duration-300 bg-white/5 backdrop-blur-sm 
-                      rounded-xl hover:bg-white/10">
-                      <span className="text-[#6DBE45] font-mono text-sm">
-                        {item.year}
-                      </span>
-                      <h4 className="mt-2 mb-2 text-lg font-bold text-white">
-                        {item.title}
-                      </h4>
-                      <p className="text-sm text-white/70">
-                        {item.description}
-                      </p>
-                    </div>
+                    <span className="text-xl">{item.icon}</span>
+                  </div>
+                  <motion.div 
+                    className="p-4 transition-all duration-300 bg-white/5 backdrop-blur-sm 
+                      rounded-xl hover:bg-white/10"
+                    whileHover={{ 
+                      x: 10,
+                      transition: { type: "spring", stiffness: 200 }
+                    }}
+                  >
+                    <span className="text-[#6DBE45] font-mono text-sm">
+                      {item.year}
+                    </span>
+                    <h4 className="mt-2 mb-2 text-lg font-bold text-white">
+                      {item.title}
+                    </h4>
+                    <p className="text-sm text-white/70">
+                      {item.description}
+                    </p>
                   </motion.div>
-                ))}
-              </div>
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Values Section */}
         <motion.div 
+          ref={valuesRef}
+          variants={staggerChildrenVariants}
+          initial="hidden"
+          animate={valuesControls}
           className="px-4 mt-20"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          key={`values-${valuesControls ? "visible" : "hidden"}`}
         >
-          <h3 className="mb-12 text-4xl font-bold text-center text-white">
-            Core <span className={`text-[${PRIMARY_GREEN}]`}>Values</span>
-          </h3>
+          <motion.h3 
+            className="mb-12 text-4xl font-bold text-center text-white"
+            variants={fadeInUpVariants}
+          >
+            Core <span className="text-[#6DBE45]">Values</span>
+          </motion.h3>
+
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {values.map((value, index) => (
               <motion.div
-                key={value.title}
-                className="relative p-8 overflow-hidden rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-[#6DBE45]/50"
-                whileHover={{ 
-                  scale: 1.05,
-                  transition: { duration: 0.3 }
+                key={`${value.title}-${valuesControls ? "visible" : "hidden"}`}
+                className="group relative p-8 overflow-hidden rounded-2xl bg-white/5 backdrop-blur-sm 
+                  border border-white/10 transform-gpu hover:border-[#6DBE45]/50 transition-colors duration-300"
+                variants={{
+                  hidden: { 
+                    opacity: 0, 
+                    y: 50,
+                    scale: 0.9
+                  },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0,
+                    scale: 1,
+                    transition: {
+                      duration: 0.5,
+                      delay: index * 0.1,
+                      type: "spring",
+                      stiffness: 100
+                    }
+                  }
                 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
+                whileHover={{ 
+                  y: -5,
+                  transition: { 
+                    duration: 0.2, 
+                    ease: "easeOut" 
+                  }
+                }}
               >
-                <motion.div
-                  className="absolute inset-0 opacity-5"
+                {/* Background Gradient */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
                   style={{ background: value.color }}
-                  whileHover={{ opacity: 0.15 }}
-                  transition={{ duration: 0.3 }}
                 />
+
+                {/* Content Container */}
                 <div className="relative z-10">
-                  <motion.span 
-                    className="flex items-center justify-center w-16 h-16 mb-6 text-4xl rounded-full bg-white/5"
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.5 }}
+                  {/* Icon Container */}
+                  <motion.div 
+                    className="flex items-center justify-center w-16 h-16 mb-6 text-4xl rounded-full 
+                      bg-white/5 group-hover:bg-white/10 transition-colors duration-300"
+                    whileHover={{ 
+                      rotate: 360,
+                      scale: 1.1,
+                      transition: { 
+                        duration: 0.6, 
+                        ease: "easeOut" 
+                      }
+                    }}
                   >
-                    {value.icon}
-                  </motion.span>
-                  <h4 className="mb-3 text-2xl font-bold text-white">{value.title}</h4>
-                  <p className="leading-relaxed text-white/70">{value.description}</p>
+                    <span className="group-hover:scale-110 transition-transform duration-300">
+                      {value.icon}
+                    </span>
+                  </motion.div>
+
+                  {/* Text Content */}
+                  <div className="transform transition-transform duration-300 group-hover:translate-y-[-2px]">
+                    <h4 className="mb-3 text-2xl font-bold text-white group-hover:text-[#6DBE45] 
+                      transition-colors duration-300">
+                      {value.title}
+                    </h4>
+                    <p className="leading-relaxed text-white/70 group-hover:text-white/90 
+                      transition-colors duration-300">
+                      {value.description}
+                    </p>
+                  </div>
                 </div>
               </motion.div>
             ))}

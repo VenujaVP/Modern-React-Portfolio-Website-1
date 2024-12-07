@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
+import useAnimateOnScroll, { fadeInUpVariants, staggerChildrenVariants, scaleInVariants } from '../hooks/useAnimateOnScroll'
 
 function Services() {
   const [hoveredIndex, setHoveredIndex] = useState(null)
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true
-  })
+  const { ref: sectionRef, controls: sectionControls, inView: sectionInView } = useAnimateOnScroll(0.1)
+  const { ref: gridRef, controls: gridControls, inView: gridInView } = useAnimateOnScroll(0.15)
 
   const services = [
     {
@@ -50,99 +48,191 @@ function Services() {
 
   return (
     <section 
-      ref={ref}
+      ref={sectionRef}
       id="services" 
       className="relative py-24 bg-gradient-to-b from-[#0A0A0A] via-[#111111] to-[#1A1A1A] overflow-hidden"
     >
       {/* Animated Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at center, #6DBE45 1px, transparent 1px)`,
-          backgroundSize: '50px 50px'
-        }} />
-      </div>
+      <motion.div 
+        className="absolute inset-0 opacity-10"
+        initial={{ opacity: 0 }}
+        animate={sectionInView ? { opacity: 0.1 } : { opacity: 0 }}
+        transition={{ duration: 1 }}
+        key={`bg-${sectionInView}`}
+      >
+        <motion.div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle at center, #6DBE45 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }}
+          animate={{
+            backgroundPosition: ['0% 0%', '100% 100%'],
+          }}
+          transition={{
+            duration: 20,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+        />
+      </motion.div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div 
+          variants={staggerChildrenVariants}
+          initial="hidden"
+          animate={sectionInView ? "visible" : "hidden"}
           className="text-center mb-20"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          key={`header-${sectionInView}`}
         >
-          <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6">
+          <motion.h2 
+            variants={fadeInUpVariants}
+            className="text-5xl lg:text-6xl font-bold text-white mb-6"
+          >
             Our <span className="text-[#6DBE45]">Services</span>
-          </h2>
-          <p className="text-xl text-white/70 max-w-3xl mx-auto">
+          </motion.h2>
+          <motion.p 
+            variants={fadeInUpVariants}
+            className="text-xl text-white/70 max-w-3xl mx-auto"
+          >
             Transforming ideas into digital reality with our comprehensive suite of services
-          </p>
+          </motion.p>
         </motion.div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div 
+          ref={gridRef}
+          variants={staggerChildrenVariants}
+          initial="hidden"
+          animate={gridInView ? "visible" : "hidden"}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          key={`grid-${gridInView}`}
+        >
           {services.map((service, index) => (
             <motion.div
-              key={service.title}
+              key={`${service.title}-${gridInView}`}
               className="relative group"
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              variants={{
+                hidden: { 
+                  opacity: 0, 
+                  y: 50,
+                  scale: 0.9 
+                },
+                visible: { 
+                  opacity: 1, 
+                  y: 0,
+                  scale: 1,
+                  transition: {
+                    duration: 0.5,
+                    delay: index * 0.1,
+                    type: "spring",
+                    stiffness: 100
+                  }
+                }
+              }}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
               {/* Card Container */}
-              <div className="relative h-full p-8 rounded-2xl bg-white/5 backdrop-blur-sm
-                border border-white/10 overflow-hidden transition-all duration-300
-                group-hover:border-[#6DBE45]/50 group-hover:transform group-hover:-translate-y-2">
-                
+              <motion.div 
+                className="relative h-full p-8 rounded-2xl bg-white/5 backdrop-blur-sm
+                  border border-white/10 overflow-hidden transition-all duration-300
+                  group-hover:border-[#6DBE45]/50"
+                whileHover={{ 
+                  y: -8,
+                  transition: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 15
+                  }
+                }}
+              >
                 {/* Gradient Background */}
-                <div className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300
-                  bg-gradient-to-br ${service.gradient}`} />
+                <motion.div 
+                  className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300
+                    bg-gradient-to-br ${service.gradient}`}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  whileHover={{ 
+                    scale: 1,
+                    opacity: 0.05,
+                    transition: { duration: 0.3 }
+                  }}
+                />
 
                 {/* Icon Container */}
                 <motion.div 
                   className="relative w-16 h-16 mb-8 rounded-xl bg-[#6DBE45]/10 
-                    flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.8 }}
+                    flex items-center justify-center"
+                  whileHover={{ 
+                    scale: 1.1,
+                    rotate: 360,
+                    transition: {
+                      type: "spring",
+                      stiffness: 300,
+                      damping: 15
+                    }
+                  }}
                 >
-                  <svg
+                  <motion.svg
                     className={`w-8 h-8 transition-colors duration-300
                       ${hoveredIndex === index ? 'text-[#6DBE45]' : 'text-white'}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
+                    whileHover={{ scale: 1.1 }}
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       d={service.icon}
                     />
-                  </svg>
+                  </motion.svg>
                 </motion.div>
 
                 {/* Content */}
-                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-[#6DBE45] transition-colors">
+                <motion.h3 
+                  className="text-2xl font-bold text-white mb-4 group-hover:text-[#6DBE45] transition-colors"
+                  variants={fadeInUpVariants}
+                >
                   {service.title}
-                </h3>
-                <p className="text-white/70 mb-8 leading-relaxed">
+                </motion.h3>
+                <motion.p 
+                  className="text-white/70 mb-8 leading-relaxed"
+                  variants={fadeInUpVariants}
+                >
                   {service.description}
-                </p>
+                </motion.p>
 
                 {/* Learn More Button */}
                 <motion.button
                   className="flex items-center gap-2 text-[#6DBE45] font-medium
                     group/btn relative overflow-hidden"
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.3 }}
+                  whileHover={{ 
+                    x: 5,
+                    transition: {
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 10
+                    }
+                  }}
                 >
                   <span>Learn More</span>
-                  <svg
-                    className="w-5 h-5 transition-transform group-hover/btn:translate-x-1"
+                  <motion.svg
+                    className="w-5 h-5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    initial={{ x: 0 }}
+                    whileHover={{ 
+                      x: 5,
+                      transition: {
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 10
+                      }
+                    }}
                   >
                     <path
                       strokeLinecap="round"
@@ -150,12 +240,12 @@ function Services() {
                       strokeWidth={2}
                       d="M17 8l4 4m0 0l-4 4m4-4H3"
                     />
-                  </svg>
+                  </motion.svg>
                 </motion.button>
-              </div>
+              </motion.div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

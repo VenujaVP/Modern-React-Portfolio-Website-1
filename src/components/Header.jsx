@@ -14,7 +14,7 @@ function Header() {
 
   return (
     <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 border-b border-[#6DBE45]/20">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <nav className="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div 
@@ -25,7 +25,7 @@ function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="items-center hidden gap-8 md:flex">
             <NavLinks scrollToSection={scrollToSection} />
             <SocialIcons />
           </div>

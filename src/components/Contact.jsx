@@ -11,8 +11,7 @@ function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true
+    threshold: 0.1
   })
 
   const contactInfo = [
@@ -51,20 +50,38 @@ function Contact() {
       className="relative py-32 bg-gradient-to-b from-[#0A0A0A] via-[#111111] to-[#1A1A1A] overflow-hidden"
     >
       {/* Animated Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at center, #6DBE45 1px, transparent 1px)`,
-          backgroundSize: '50px 50px'
-        }} />
-      </div>
+      <motion.div 
+        className="absolute inset-0 opacity-10"
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 0.1 } : { opacity: 0 }}
+        transition={{ duration: 1 }}
+        key={`bg-${inView}`}
+      >
+        <motion.div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle at center, #6DBE45 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }}
+          animate={inView ? {
+            backgroundPosition: ['0% 0%', '100% 100%']
+          } : {}}
+          transition={{
+            duration: 20,
+            ease: "linear",
+            repeat: Infinity
+          }}
+        />
+      </motion.div>
 
       <div className="relative px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div 
           className="mb-16"
           initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.6, type: "spring" }}
+          key={`header-${inView}`}
         >
           <h2 className="mb-4 text-5xl font-bold text-center text-white lg:text-6xl">
             Let&apos;s <span className="text-[#6DBE45]">Connect</span>
@@ -80,8 +97,9 @@ function Contact() {
           <motion.div 
             className="p-6 overflow-hidden border sm:p-8 rounded-2xl bg-white/5 backdrop-blur-sm border-white/10"
             initial={{ opacity: 0, x: -50 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+            transition={{ duration: 0.5, delay: 0.2, type: "spring" }}
+            key={`form-${inView}`}
           >
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -154,22 +172,28 @@ function Contact() {
           <motion.div 
             className="space-y-6"
             initial={{ opacity: 0, x: 50 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+            transition={{ duration: 0.5, delay: 0.4, type: "spring" }}
+            key={`info-${inView}`}
           >
             {/* Contact Details */}
             <div className="space-y-4">
               {contactInfo.map((info, index) => (
                 <motion.a
-                  key={info.title}
+                  key={`${info.title}-${inView}`}
                   href={info.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-start gap-4 p-5 rounded-xl border border-white/10 bg-white/5 
                     backdrop-blur-sm hover:border-[#6DBE45]/50 transition-colors group"
                   initial={{ opacity: 0, y: 20 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                  animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  transition={{ 
+                    duration: 0.5, 
+                    delay: 0.6 + index * 0.1,
+                    type: "spring",
+                    stiffness: 100
+                  }}
                 >
                   <div className="p-3 rounded-full bg-[#6DBE45]/20 group-hover:bg-[#6DBE45]/30 transition-colors">
                     <svg className="w-6 h-6 text-[#6DBE45]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -190,8 +214,9 @@ function Contact() {
             <motion.div 
               className="mt-8 overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
               initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.6 }}
+              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.5, delay: 0.8, type: "spring" }}
+              key={`map-${inView}`}
             >
               <iframe
                 title="Office Location"
