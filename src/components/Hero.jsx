@@ -26,15 +26,15 @@ function Hero() {
     <section 
       ref={ref}
       id="hero" 
-      className="relative min-h-screen flex items-center overflow-hidden bg-[#0A0A0A]"
+      className="relative min-h-[100vh] flex items-center overflow-hidden bg-[#0A0A0A] py-16 sm:py-20"
     >
-      {/* Animated Background */}
+      {/* Animated Background - enhanced for mobile */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#204E27]/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#204E27]/30 to-transparent" />
         <motion.div
-          className="absolute inset-0 opacity-30"
+          className="absolute inset-0 opacity-20"
           style={{
-            backgroundImage: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(109, 190, 69, 0.2) 0%, transparent 50%)`
+            backgroundImage: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(109, 190, 69, 0.3) 0%, transparent 60%)`
           }}
         />
       </div>
@@ -65,24 +65,24 @@ function Hero() {
       </div>
 
       {/* Main Content */}
-      <div className="relative w-full px-4 py-20 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center gap-12 lg:flex-row lg:items-start lg:gap-20">
+      <div className="relative w-full px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:gap-20">
           
-          {/* Left Content */}
+          {/* Left Content - improved mobile layout */}
           <motion.div 
-            className="flex-1 text-left"
+            className="flex-1 text-center lg:text-left order-2 lg:order-1"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Dynamic Header */}
+            {/* Dynamic Header - enhanced typography */}
             <div className="mb-8 text-white">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <h1 className="mb-4 text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+                <h1 className="mb-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-7xl">
                   Ethan Carter
                 </h1>
               </motion.div>
@@ -96,53 +96,45 @@ function Hero() {
                   2000,
                 ]}
                 wrapper="h2"
-                className="text-2xl sm:text-3xl text-[#6DBE45] font-light"
+                className="text-xl sm:text-2xl text-[#6DBE45] font-light"
                 repeat={Infinity}
               />
             </div>
 
-            {/* Interactive Social Links */}
-            <motion.div 
-              className="flex gap-8 mb-12"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              {/* ... social links with hover effects ... */}
-            </motion.div>
-
-            {/* Animated Stats */}
-            <div className="grid max-w-2xl grid-cols-1 gap-8 mb-12 md:grid-cols-3">
+            {/* Animated Stats - improved mobile grid */}
+            <div className="grid grid-cols-2 gap-4 mb-8 sm:grid-cols-3 sm:gap-8">
               {stats.map(({ number, label, icon }, index) => (
                 <motion.div
                   key={label}
-                  className="p-6 transition-all duration-300 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10"
+                  className="p-4 sm:p-6 transition-all duration-300 bg-white/5 backdrop-blur-sm rounded-xl 
+                    hover:bg-white/10 border border-white/10 hover:border-[#6DBE45]/50"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 * index }}
                   whileHover={{ scale: 1.05 }}
                 >
-                  <span className="block mb-4 text-3xl">{icon}</span>
+                  <span className="block mb-3 text-2xl sm:text-3xl">{icon}</span>
                   <motion.div 
-                    className="text-4xl font-bold text-[#6DBE45] mb-2"
+                    className="text-2xl sm:text-3xl font-bold text-[#6DBE45] mb-1"
                     initial={{ number: 0 }}
                     animate={{ number: parseInt(number) }}
                     transition={{ duration: 2, delay: 0.5 }}
                   >
                     {number}
                   </motion.div>
-                  <div className="text-lg text-white/70">{label}</div>
+                  <div className="text-sm sm:text-base text-white/70">{label}</div>
                 </motion.div>
               ))}
             </div>
 
-            {/* Interactive CTA Button */}
+            {/* Interactive CTA Button - enhanced for mobile */}
             <motion.button
-              className="group relative bg-[#6DBE45] text-white font-bold py-4 px-10 rounded-full overflow-hidden"
+              className="group relative bg-[#6DBE45] text-white font-bold py-3 sm:py-4 px-8 sm:px-10 
+                rounded-full overflow-hidden w-full sm:w-auto"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="relative z-10">Let's Connect</span>
+              <span className="relative z-10">Let&apos;s Connect</span>
               <motion.div
                 className="absolute inset-0 bg-[#204E27]"
                 initial={{ x: '-100%' }}
@@ -152,17 +144,17 @@ function Hero() {
             </motion.button>
           </motion.div>
 
-          {/* Right Profile Section */}
+          {/* Right Profile Section - improved mobile positioning */}
           <motion.div
-            className="lg:w-1/3"
+            className="lg:w-1/3 order-1 lg:order-2 mb-8 lg:mb-0"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
           >
             <div className="relative">
-              {/* Profile Image with Dynamic Glow */}
+              {/* Profile Image with Enhanced Dynamic Glow */}
               <motion.div
-                className="relative overflow-hidden rounded-full w-72 h-72 lg:w-96 lg:h-96"
+                className="relative overflow-hidden rounded-full w-48 h-48 sm:w-64 sm:h-64 lg:w-96 lg:h-96 mx-auto"
                 animate={{
                   boxShadow: [
                     '0 0 20px rgba(109, 190, 69, 0.3)',
@@ -183,9 +175,10 @@ function Hero() {
                 />
               </motion.div>
 
-              {/* Floating Achievement Badges */}
+              {/* Enhanced Floating Achievement Badges */}
               <motion.div
-                className="absolute p-4 rounded-full -right-4 top-10 bg-white/10 backdrop-blur-md"
+                className="absolute p-3 sm:p-4 rounded-full -right-2 sm:-right-4 top-10 
+                  bg-white/10 backdrop-blur-md border border-white/20"
                 animate={{
                   y: [0, -10, 0],
                 }}
@@ -194,7 +187,7 @@ function Hero() {
                   repeat: Infinity,
                 }}
               >
-                <span className="text-2xl">🏆</span>
+                <span className="text-xl sm:text-2xl">🏆</span>
               </motion.div>
             </div>
           </motion.div>

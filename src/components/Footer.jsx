@@ -41,15 +41,23 @@ function Footer() {
   ]
 
   return (
-    <footer className="bg-[#204E27] text-[#E8E8E8]">
-      <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="relative bg-gradient-to-b from-[#0A0A0A] to-[#111111] text-[#E8E8E8]">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at center, #6DBE45 1px, transparent 1px)`,
+          backgroundSize: '50px 50px'
+        }} />
+      </div>
+
+      <div className="relative px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Logo & Description */}
           <div className="space-y-4">
-            <div className="text-2xl font-bold tracking-tight">
+            <div className="text-2xl font-bold tracking-tight text-[#6DBE45]">
               Abraham.dev
             </div>
-            <p className="text-[#E8E8E8]/80 text-sm">
+            <p className="text-white/70 text-sm leading-relaxed">
               Crafting digital experiences with passion and precision. 
               Let's build something amazing together.
             </p>
@@ -57,13 +65,13 @@ function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="mb-6 text-lg font-semibold text-white">Quick Links</h3>
+            <ul className="space-y-3">
               {quickLinks.map(link => (
                 <li key={link.name}>
                   <button
                     onClick={() => scrollToSection(link.id)}
-                    className="text-[#E8E8E8]/80 hover:text-[#6DBE45] transition-colors"
+                    className="text-white/70 hover:text-[#6DBE45] transition-colors"
                   >
                     {link.name}
                   </button>
@@ -74,23 +82,27 @@ function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold">Contact</h3>
-            <ul className="space-y-2 text-[#E8E8E8]/80">
-              <li>demo@abraham.dev</li>
-              <li>+94 77 777 7777</li>
+            <h3 className="mb-6 text-lg font-semibold text-white">Contact</h3>
+            <ul className="space-y-3 text-white/70">
+              <li className="hover:text-[#6DBE45] transition-colors">
+                <a href="mailto:demo@abraham.dev">demo@abraham.dev</a>
+              </li>
+              <li className="hover:text-[#6DBE45] transition-colors">
+                <a href="tel:+94777777777">+94 77 777 7777</a>
+              </li>
               <li>aaaaa, aaaaa</li>
             </ul>
           </div>
 
           {/* Social Links */}
           <div>
-            <h3 className="mb-4 text-lg font-semibold">Follow Us</h3>
-            <div className="flex gap-4">
+            <h3 className="mb-6 text-lg font-semibold text-white">Follow Us</h3>
+            <div className="flex gap-5">
               {socials.map(social => (
                 <a
                   key={social.name}
                   href={social.url}
-                  className="text-[#E8E8E8]/80 hover:text-[#6DBE45] transition-colors"
+                  className="text-white/70 hover:text-[#6DBE45] transition-colors"
                   aria-label={social.name}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -105,7 +117,7 @@ function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-[#E8E8E8]/10 mt-12 pt-8 text-center text-[#E8E8E8]/60 text-sm">
+        <div className="pt-8 mt-12 text-sm text-center border-t border-white/10 text-white/50">
           © {new Date().getFullYear()} Abraham.dev. All rights reserved.
         </div>
       </div>

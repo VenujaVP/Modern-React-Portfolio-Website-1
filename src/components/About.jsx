@@ -107,10 +107,10 @@ function About() {
         }}
       />
 
-      <div className="relative px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div className="relative px-2 mx-auto max-w-7xl sm:px-4 lg:px-6">
         {/* Main Content */}
         <motion.div 
-          className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-20"
+          className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -180,29 +180,39 @@ function About() {
           {/* Right Column */}
           <div className="space-y-12">
             {/* Interactive Timeline */}
-            <div className="relative">
+            <div className="relative w-full">
               <h3 className="mb-8 text-3xl font-bold text-white">My Journey</h3>
-              {timeline.map((item, index) => (
-                <motion.div
-                  key={item.year}
-                  className="relative pl-12 pb-12 border-l-2 border-[#6DBE45]/30 last:pb-0"
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.2 }}
-                >
-                  <motion.div 
-                    className="absolute -left-[25px] p-4 bg-[#1A1A1A] rounded-full border-2 border-[#6DBE45]"
-                    whileHover={{ scale: 1.2, rotate: 360 }}
+              <div className="relative ml-6 md:ml-8">
+                {timeline.map((item, index) => (
+                  <motion.div
+                    key={item.year}
+                    className="relative pb-12 pl-8 border-l-2 border-[#6DBE45]/30 last:pb-0"
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.2 }}
                   >
-                    <span className="text-2xl">{item.icon}</span>
+                    <motion.div 
+                      className="absolute left-0 p-3 -translate-x-1/2 bg-[#1A1A1A] rounded-full 
+                        border-2 border-[#6DBE45]"
+                      whileHover={{ scale: 1.2, rotate: 360 }}
+                    >
+                      <span className="text-xl">{item.icon}</span>
+                    </motion.div>
+                    <div className="p-4 transition-all duration-300 bg-white/5 backdrop-blur-sm 
+                      rounded-xl hover:bg-white/10">
+                      <span className="text-[#6DBE45] font-mono text-sm">
+                        {item.year}
+                      </span>
+                      <h4 className="mt-2 mb-2 text-lg font-bold text-white">
+                        {item.title}
+                      </h4>
+                      <p className="text-sm text-white/70">
+                        {item.description}
+                      </p>
+                    </div>
                   </motion.div>
-                  <div className="p-6 transition-all duration-300 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10">
-                    <span className="text-[#6DBE45] font-mono">{item.year}</span>
-                    <h4 className="mt-2 mb-2 text-xl font-bold text-white">{item.title}</h4>
-                    <p className="text-white/70">{item.description}</p>
-                  </div>
-                </motion.div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>
