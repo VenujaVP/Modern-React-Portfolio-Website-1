@@ -3,17 +3,54 @@ import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
 
 function Projects() {
+  // States for project display and filtering
   const [selectedProject, setSelectedProject] = useState(null)
   const [activeFilter, setActiveFilter] = useState('all')
   const videoRef = useRef(null)
+  
+  // Check if section is visible in viewport
   const { ref, inView } = useInView({
     threshold: 0.1,
     rootMargin: "100px"
   })
   const carouselRef = useRef(null)
 
+  // Project category filters
   const categories = ['all', 'web', 'mobile', 'design', 'blockchain']
 
+  // Animation settings for container elements
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  }
+
+  // Animation settings for individual items
+  const itemVariants = {
+    hidden: { 
+      opacity: 0,
+      y: 20,
+      scale: 0.95
+    },
+    visible: { 
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 50,
+        damping: 15,
+        mass: 1
+      }
+    }
+  }
+
+  // Project data with details
   const projects = [
     {
       id: 1,
@@ -82,43 +119,13 @@ function Projects() {
     }
   ]
 
+  // Filter projects based on selected category
   const filteredProjects = activeFilter === 'all' 
     ? projects 
     : projects.filter(project => project.category === activeFilter)
 
+  // Get featured project if any
   const featuredProject = projects.find(p => p.featured)
-
-  // Container animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  }
-
-  // Item animation variants
-  const itemVariants = {
-    hidden: { 
-      opacity: 0,
-      y: 20,
-      scale: 0.95
-    },
-    visible: { 
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 50,
-        damping: 15,
-        mass: 1
-      }
-    }
-  }
 
   return (
     <section 
@@ -126,7 +133,7 @@ function Projects() {
       id="projects" 
       className="relative py-24 bg-gradient-to-b from-[#0A0A0A] via-[#111111] to-[#1A1A1A] overflow-hidden"
     >
-      {/* Background Pattern */}
+      {/* Dotted background with animation */}
       <motion.div 
         className="absolute inset-0"
         initial={{ opacity: 0 }}
@@ -138,7 +145,7 @@ function Projects() {
           style={{
             backgroundImage: `radial-gradient(circle at center, #6DBE45 1px, transparent 1px)`,
             backgroundSize: '50px 50px',
-            willChange: 'transform' // Performance optimization
+            willChange: 'transform'
           }}
           animate={inView ? {
             backgroundPosition: ['0% 0%', '100% 100%']
@@ -152,7 +159,7 @@ function Projects() {
       </motion.div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Title and category filters */}
         <motion.div 
           className="text-center mb-16"
           variants={containerVariants}
@@ -197,18 +204,32 @@ function Projects() {
           </motion.div>
         </motion.div>
 
-        {/* Projects Grid */}
+        {/* Featured project showcase */}
+        {featuredProject && (
+          <motion.div 
+            className="mb-20"
+            variants={containerVariants}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+          >
+            {/* ... featured project content ... */}
+          </motion.div>
+        )}
+
+        {/* Project cards carousel */}
         <motion.div 
           className="relative"
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
+          {/* Scrollable project list */}
           <div 
             ref={carouselRef}
             className="flex overflow-x-auto gap-8 snap-x snap-mandatory hide-scrollbar pb-12"
           >
             {filteredProjects.map((project, index) => (
+              // Individual project card
               <motion.div
                 key={`${project.id}-${activeFilter}`}
                 className="flex-none w-[350px] snap-center group relative rounded-xl 
@@ -288,7 +309,7 @@ function Projects() {
             ))}
           </div>
 
-          {/* Navigation Arrows */}
+          {/* Scroll navigation buttons */}
           <motion.button
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6
               bg-white/10 backdrop-blur-sm p-4 rounded-full

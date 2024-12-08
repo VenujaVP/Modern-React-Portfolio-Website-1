@@ -1,20 +1,22 @@
 import { useState } from 'react'
 
 function Header() {
+  // Control mobile menu open/close state
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  // Function to handle smooth scrolling
+  // Scroll to section and close mobile menu
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
-      setIsMenuOpen(false) // Close mobile menu after clicking
+      setIsMenuOpen(false)
     }
   }
 
   return (
     <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-50 border-b border-[#6DBE45]/20">
       <nav className="px-4 py-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        {/* Navigation wrapper */}
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div 
@@ -24,13 +26,13 @@ function Header() {
             NexaVision
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop menu - hidden on mobile */}
           <div className="items-center hidden gap-8 md:flex">
             <NavLinks scrollToSection={scrollToSection} />
             <SocialIcons />
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile menu button */}
           <button 
             className="md:hidden text-[#204E27] hover:text-[#6DBE45] transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -47,7 +49,7 @@ function Header() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile menu - shows when menu is open */}
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-[#204E27]/10 mt-4">
             <NavLinks mobile scrollToSection={scrollToSection} />
@@ -59,7 +61,9 @@ function Header() {
   )
 }
 
+// Navigation links component
 function NavLinks({ mobile, scrollToSection }) {
+  // List of navigation items
   const links = [
     { name: 'Home', id: 'hero' },
     { name: 'About', id: 'about' },
@@ -85,7 +89,9 @@ function NavLinks({ mobile, scrollToSection }) {
   )
 }
 
+// Social media icons component
 function SocialIcons({ mobile }) {
+  // Social media links and icons
   const socials = [
     { 
       name: 'GitHub',
@@ -105,6 +111,7 @@ function SocialIcons({ mobile }) {
     }
   ]
 
+  // Render icons with mobile-specific styling
   return (
     <div className={`flex ${mobile ? 'mt-4 justify-center' : ''} gap-4`}>
       {socials.map(social => (

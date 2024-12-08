@@ -3,10 +3,14 @@ import { motion } from 'framer-motion'
 import useAnimateOnScroll, { fadeInUpVariants, staggerChildrenVariants, scaleInVariants } from '../hooks/useAnimateOnScroll'
 
 function Services() {
+  // Track which service card is being hovered
   const [hoveredIndex, setHoveredIndex] = useState(null)
+
+  // Set up scroll animations for the whole section and the grid
   const { ref: sectionRef, controls: sectionControls, inView: sectionInView } = useAnimateOnScroll(0.1)
   const { ref: gridRef, controls: gridControls, inView: gridInView } = useAnimateOnScroll(0.15)
 
+  // List of all services with their details
   const services = [
     {
       title: 'Web Development',
@@ -52,7 +56,7 @@ function Services() {
       id="services" 
       className="relative py-24 bg-gradient-to-b from-[#0A0A0A] via-[#111111] to-[#1A1A1A] overflow-hidden"
     >
-      {/* Animated Background Pattern */}
+      {/* Moving dots background */}
       <motion.div 
         className="absolute inset-0 opacity-10"
         initial={{ opacity: 0 }}
@@ -60,6 +64,7 @@ function Services() {
         transition={{ duration: 1 }}
         key={`bg-${sectionInView}`}
       >
+        {/* Dots pattern that moves across the screen */}
         <motion.div 
           className="absolute inset-0"
           style={{
@@ -77,38 +82,39 @@ function Services() {
         />
       </motion.div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+      <div className="relative px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        {/* Title and subtitle that fade in when scrolled into view */}
         <motion.div 
           variants={staggerChildrenVariants}
           initial="hidden"
           animate={sectionInView ? "visible" : "hidden"}
-          className="text-center mb-20"
+          className="mb-20 text-center"
           key={`header-${sectionInView}`}
         >
           <motion.h2 
             variants={fadeInUpVariants}
-            className="text-5xl lg:text-6xl font-bold text-white mb-6"
+            className="mb-6 text-5xl font-bold text-white lg:text-6xl"
           >
             Our <span className="text-[#6DBE45]">Services</span>
           </motion.h2>
           <motion.p 
             variants={fadeInUpVariants}
-            className="text-xl text-white/70 max-w-3xl mx-auto"
+            className="max-w-3xl mx-auto text-xl text-white/70"
           >
             Transforming ideas into digital reality with our comprehensive suite of services
           </motion.p>
         </motion.div>
 
-        {/* Services Grid */}
+        {/* Grid of service cards */}
         <motion.div 
           ref={gridRef}
           variants={staggerChildrenVariants}
           initial="hidden"
           animate={gridInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
           key={`grid-${gridInView}`}
         >
+          {/* Map through each service to create cards */}
           {services.map((service, index) => (
             <motion.div
               key={`${service.title}-${gridInView}`}
@@ -134,7 +140,7 @@ function Services() {
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              {/* Card Container */}
+              {/* Each service card */}
               <motion.div 
                 className="relative h-full p-8 rounded-2xl bg-white/5 backdrop-blur-sm
                   border border-white/10 overflow-hidden transition-all duration-300
@@ -148,7 +154,7 @@ function Services() {
                   }
                 }}
               >
-                {/* Gradient Background */}
+                {/* Green gradient that shows on hover */}
                 <motion.div 
                   className={`absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300
                     bg-gradient-to-br ${service.gradient}`}
@@ -160,7 +166,7 @@ function Services() {
                   }}
                 />
 
-                {/* Icon Container */}
+                {/* Service icon that spins on hover */}
                 <motion.div 
                   className="relative w-16 h-16 mb-8 rounded-xl bg-[#6DBE45]/10 
                     flex items-center justify-center"
@@ -191,7 +197,7 @@ function Services() {
                   </motion.svg>
                 </motion.div>
 
-                {/* Content */}
+                {/* Service title and description */}
                 <motion.h3 
                   className="text-2xl font-bold text-white mb-4 group-hover:text-[#6DBE45] transition-colors"
                   variants={fadeInUpVariants}
@@ -199,13 +205,13 @@ function Services() {
                   {service.title}
                 </motion.h3>
                 <motion.p 
-                  className="text-white/70 mb-8 leading-relaxed"
+                  className="mb-8 leading-relaxed text-white/70"
                   variants={fadeInUpVariants}
                 >
                   {service.description}
                 </motion.p>
 
-                {/* Learn More Button */}
+                {/* Learn More button with arrow */}
                 <motion.button
                   className="flex items-center gap-2 text-[#6DBE45] font-medium
                     group/btn relative overflow-hidden"

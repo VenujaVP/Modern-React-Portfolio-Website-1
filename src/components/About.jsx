@@ -5,31 +5,36 @@ import useAnimateOnScroll, { fadeInUpVariants, staggerChildrenVariants, scaleInV
 const PRIMARY_GREEN = '#6DBE45'
 
 function About() {
+  // Track scroll position for background movement
   const containerRef = useRef(null)
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   })
 
+  // Setup animation controls for different sections
   const { ref: contentRef, controls: contentControls } = useAnimateOnScroll()
   const { ref: timelineRef, controls: timelineControls } = useAnimateOnScroll(0.15)
   const { ref: valuesRef, controls: valuesControls } = useAnimateOnScroll(0.1)
 
-  // Parallax and color transition effects
+  // Move background based on scroll
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%'])
 
+  // Skills and achievements shown in highlights
   const highlights = [
     { text: 'Developer', icon: '💻' },
     { text: 'Designer', icon: '🎨' },
     { text: 'Problem Solver', icon: '🚀' }
   ]
 
+  // Statistics display
   const stats = [
     { number: '194', label: 'Completed Projects', icon: '🎯' },
     { number: '98%', label: 'Client Rating', icon: '⭐' },
     { number: '6', label: 'Years of Experience', icon: '⚡' },
   ]
 
+  // Career timeline data
   const timeline = [
     {
       year: '2017',
@@ -63,6 +68,7 @@ function About() {
     }
   ]
 
+  // Core values and principles
   const values = [
     {
       icon: '🎯',
@@ -99,7 +105,7 @@ function About() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {/* Animated Background */}
+      {/* Moving background pattern */}
       <motion.div 
         className="absolute inset-0 opacity-20"
         style={{ 
@@ -110,7 +116,7 @@ function About() {
       />
 
       <div className="relative px-2 mx-auto max-w-7xl sm:px-4 lg:px-6">
-        {/* Main Content */}
+        {/* Two column layout */}
         <motion.div 
           ref={contentRef}
           variants={staggerChildrenVariants}
@@ -119,13 +125,13 @@ function About() {
           className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16"
           key={contentControls ? "visible" : "hidden"}
         >
-          {/* Left Column */}
+          {/* Left column - About me and highlights */}
           <motion.div 
             className="space-y-12" 
             variants={fadeInUpVariants}
             key={contentControls ? "visible" : "hidden"}
           >
-            {/* About Header */}
+            {/* About section header */}
             <div>
               <motion.h2 
                 className="mb-6 text-5xl font-bold text-white"
@@ -134,7 +140,7 @@ function About() {
                 About <span className="text-[#6DBE45]">Me</span>
               </motion.h2>
 
-              {/* Interactive Video Card */}
+              {/* Video introduction */}
               <motion.div 
                 className="relative overflow-hidden aspect-video rounded-xl group"
                 variants={scaleInVariants}
@@ -164,7 +170,7 @@ function About() {
               </motion.div>
             </div>
 
-            {/* Animated Highlights */}
+            {/* Skills and expertise */}
             <motion.div 
               className="flex flex-wrap gap-4"
               variants={staggerChildrenVariants}
@@ -187,7 +193,7 @@ function About() {
             </motion.div>
           </motion.div>
 
-          {/* Right Column - Timeline */}
+          {/* Right column - Career timeline */}
           <motion.div 
             ref={timelineRef}
             variants={staggerChildrenVariants}
@@ -235,7 +241,7 @@ function About() {
           </motion.div>
         </motion.div>
 
-        {/* Values Section */}
+        {/* Core values section */}
         <motion.div 
           ref={valuesRef}
           variants={staggerChildrenVariants}

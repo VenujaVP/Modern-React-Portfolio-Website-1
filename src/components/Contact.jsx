@@ -3,17 +3,23 @@ import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 
 function Contact() {
+  // Store form input values
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
     message: ''
   })
+
+  // Track if form is being submitted
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Check if section is visible on screen
   const { ref, inView } = useInView({
     threshold: 0.1
   })
 
+  // Contact details with icons and links
   const contactInfo = [
     {
       icon: "M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z",
@@ -35,11 +41,14 @@ function Contact() {
     }
   ]
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
+    // Fake API call delay
     await new Promise(resolve => setTimeout(resolve, 1000))
     setIsSubmitting(false)
+    // Reset form after submission
     setFormData({ name: '', email: '', subject: '', message: '' })
   }
 
@@ -49,7 +58,7 @@ function Contact() {
       id="contact" 
       className="relative py-32 bg-gradient-to-b from-[#0A0A0A] via-[#111111] to-[#1A1A1A] overflow-hidden"
     >
-      {/* Animated Background Pattern */}
+      {/* Moving dots in background */}
       <motion.div 
         className="absolute inset-0 opacity-10"
         initial={{ opacity: 0 }}
@@ -57,6 +66,7 @@ function Contact() {
         transition={{ duration: 1 }}
         key={`bg-${inView}`}
       >
+        {/* Animated dot pattern */}
         <motion.div 
           className="absolute inset-0"
           style={{
@@ -75,7 +85,7 @@ function Contact() {
       </motion.div>
 
       <div className="relative px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Section title */}
         <motion.div 
           className="mb-16"
           initial={{ opacity: 0, y: 20 }}
@@ -93,7 +103,7 @@ function Contact() {
         </motion.div>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-16">
-          {/* Contact Form */}
+          {/* Contact form with inputs */}
           <motion.div 
             className="p-6 overflow-hidden border sm:p-8 rounded-2xl bg-white/5 backdrop-blur-sm border-white/10"
             initial={{ opacity: 0, x: -50 }}
@@ -101,7 +111,9 @@ function Contact() {
             transition={{ duration: 0.5, delay: 0.2, type: "spring" }}
             key={`form-${inView}`}
           >
+            {/* Form fields */}
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Name and email inputs */}
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div className="relative">
                   <input
@@ -152,6 +164,8 @@ function Contact() {
                     focus:ring-2 focus:ring-[#6DBE45]/20 outline-none transition-colors placeholder:text-white/30 text-white resize-none"
                 />
               </div>
+              
+              {/* Submit button with loading state */}
               <motion.button
                 type="submit"
                 disabled={isSubmitting}
@@ -162,13 +176,13 @@ function Contact() {
                 whileTap={{ scale: 0.98 }}
               >
                 <span className="relative z-10">{isSubmitting ? 'Sending...' : 'Send Message'}</span>
-                <div className="absolute inset-0 bg-white/20 transform -skew-x-12 translate-x-full 
-                  group-hover:translate-x-0 transition-transform duration-700" />
+                {/* Button hover effect */}
+                <div className="absolute inset-0 transition-transform duration-700 transform translate-x-full -skew-x-12 bg-white/20 group-hover:translate-x-0" />
               </motion.button>
             </form>
           </motion.div>
 
-          {/* Contact Information */}
+          {/* Contact info and map */}
           <motion.div 
             className="space-y-6"
             initial={{ opacity: 0, x: 50 }}
@@ -176,7 +190,7 @@ function Contact() {
             transition={{ duration: 0.5, delay: 0.4, type: "spring" }}
             key={`info-${inView}`}
           >
-            {/* Contact Details */}
+            {/* Contact details with icons */}
             <div className="space-y-4">
               {contactInfo.map((info, index) => (
                 <motion.a
@@ -210,9 +224,9 @@ function Contact() {
               ))}
             </div>
 
-            {/* Map */}
+            {/* Google Maps embed */}
             <motion.div 
-              className="mt-8 overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm"
+              className="mt-8 overflow-hidden border rounded-xl border-white/10 bg-white/5 backdrop-blur-sm"
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.5, delay: 0.8, type: "spring" }}
