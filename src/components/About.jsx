@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import useAnimateOnScroll, { fadeInUpVariants, staggerChildrenVariants, scaleInVariants } from '../hooks/useAnimateOnScroll'
 
@@ -96,6 +96,23 @@ function About() {
     }
   ]
 
+  const videoRef = useRef(null)
+  const [progress, setProgress] = useState(0)
+
+  // Update video progress
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    const handleTimeUpdate = () => {
+      const progress = (video.currentTime / video.duration) * 100
+      setProgress(progress)
+    }
+
+    video.addEventListener('timeupdate', handleTimeUpdate)
+    return () => video.removeEventListener('timeupdate', handleTimeUpdate)
+  }, [])
+
   return (
     <motion.section 
       ref={containerRef}
@@ -152,7 +169,7 @@ function About() {
                 </motion.p>
               </motion.div>
 
-              {/* Video introduction - removed text overlay */}
+              {/* Video introduction */}
               <motion.div 
                 className="relative overflow-hidden cursor-pointer aspect-video rounded-xl group"
                 variants={scaleInVariants}
@@ -175,6 +192,7 @@ function About() {
 
                 {/* Video element */}
                 <motion.video
+                  ref={videoRef}
                   className="object-cover w-full h-full transform-gpu"
                   poster="/video-thumbnail.jpg"
                   autoPlay
@@ -193,6 +211,135 @@ function About() {
                   <source src="/111.mp4" type="video/mp4" />
                   <p>Your browser doesn&apos;t support HTML5 video.</p>
                 </motion.video>
+
+                {/* Video Progress Bar - Moved up and made interactive */}
+                <div className="absolute bottom-16 left-0 right-0 z-30 px-4 opacity-0 group-hover:opacity-100 
+                  transition-opacity duration-300">
+                  {/* Progress Bar Container */}
+                  <div 
+                    className="w-full h-2 bg-white/20 rounded-full cursor-pointer relative"
+                    onClick={(e) => {
+                      const bounds = e.currentTarget.getBoundingClientRect()
+                      const x = e.clientX - bounds.left
+                      const percent = x / bounds.width
+                      if (videoRef.current) {
+                        videoRef.current.currentTime = percent * videoRef.current.duration
+                      }
+                    }}
+                    onMouseMove={(e) => {
+                      if (e.buttons === 1) { // If mouse button is held down
+                        const bounds = e.currentTarget.getBoundingClientRect()
+                        const x = e.clientX - bounds.left
+                        const percent = x / bounds.width
+                        if (videoRef.current) {
+                          videoRef.current.currentTime = percent * videoRef.current.duration
+                        }
+                      }
+                    }}
+                  >
+                    {/* Progress Bar */}
+                    <motion.div 
+                      className="absolute top-0 left-0 h-full bg-[#6DBE45] rounded-full"
+                      style={{ width: `${progress}%` }}
+                      transition={{ duration: 0.1 }}
+                    >
+                      {/* Progress Handle */}
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 
+                        bg-[#6DBE45] rounded-full shadow-lg scale-0 group-hover:scale-100 
+                        transition-transform duration-200 hover:scale-125"
+                      />
+                    </motion.div>
+                  </div>
+                </div>
+
+                {/* Video Controls */}
+                <div className="absolute bottom-4 left-0 right-0 z-30 px-4 opacity-0 group-hover:opacity-100 
+                  transition-opacity duration-300 bg-gradient-to-t from-black/60 to-transparent">
+                  <div className="flex items-center justify-between">
+                    {/* Left Controls */}
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => {
+                          const video = videoRef.current
+                          if (video.paused) {
+                            video.play()
+                          } else {
+                            video.pause()
+                          }
+                        }}
+                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                      >
+                        <svg 
+                          className="w-5 h-5 text-white" 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                        >
+                          {videoRef.current?.paused ? (
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                            />
+                          ) : (
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M10 9v6m4-6v6"
+                            />
+                          )}
+                        </svg>
+                      </button>
+
+                      {/* Time Display */}
+                      <div className="text-sm text-white/80">
+                        {videoRef.current ? 
+                          `${Math.floor(videoRef.current.currentTime / 60)}:${Math.floor(videoRef.current.currentTime % 60).toString().padStart(2, '0')} / 
+                           ${Math.floor(videoRef.current.duration / 60)}:${Math.floor(videoRef.current.duration % 60).toString().padStart(2, '0')}`
+                          : '0:00 / 0:00'
+                        }
+                      </div>
+                    </div>
+
+                    {/* Right Controls */}
+                    <div className="flex items-center gap-4">
+                      <button
+                        onClick={() => {
+                          const video = videoRef.current
+                          if (video) {
+                            video.muted = !video.muted
+                          }
+                        }}
+                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                      >
+                        <svg 
+                          className="w-5 h-5 text-white" 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                        >
+                          {videoRef.current?.muted ? (
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                            />
+                          ) : (
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                            />
+                          )}
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
             </div>
 
