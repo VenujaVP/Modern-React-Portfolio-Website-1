@@ -131,16 +131,28 @@ function About() {
             variants={fadeInUpVariants}
             key={contentControls ? "visible" : "hidden"}
           >
-            {/* About section header */}
+            {/* About section header and video */}
             <div>
-              <motion.h2 
-                className="mb-6 text-5xl font-bold text-white"
-                variants={fadeInUpVariants}
-              >
-                About <span className="text-[#6DBE45]">Me</span>
-              </motion.h2>
+              <motion.div className="flex flex-col gap-6 mb-8">
+                <motion.h2 
+                  className="text-5xl font-bold text-white"
+                  variants={fadeInUpVariants}
+                >
+                  About <span className="text-[#6DBE45]">Me</span>
+                </motion.h2>
+                
+                {/* Story description */}
+                <motion.p 
+                  className="text-lg text-white/80 max-w-2xl"
+                  variants={fadeInUpVariants}
+                >
+                  Watch how I turned my passion into profession. With {stats[2].number} years of experience 
+                  and {stats[0].number}+ completed projects, I've dedicated my journey to creating 
+                  innovative digital solutions.
+                </motion.p>
+              </motion.div>
 
-              {/* Video introduction */}
+              {/* Video introduction - removed text overlay */}
               <motion.div 
                 className="relative overflow-hidden cursor-pointer aspect-video rounded-xl group"
                 variants={scaleInVariants}
@@ -174,44 +186,13 @@ function About() {
                     scale: 1.1,
                     transition: {
                       duration: 0.5,
-                      ease: [0.33, 1, 0.68, 1]  // Custom easing for smoother motion
+                      ease: [0.33, 1, 0.68, 1]
                     }
                   }}
                 >
                   <source src="/111.mp4" type="video/mp4" />
                   <p>Your browser doesn&apos;t support HTML5 video.</p>
                 </motion.video>
-
-                {/* Text overlay */}
-                <motion.div 
-                  className="absolute bottom-0 left-0 right-0 z-20 p-6 text-white"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ 
-                    y: -5,
-                    transition: {
-                      duration: 0.3,
-                      ease: "easeOut"
-                    }
-                  }}
-                >
-                  <motion.h3 
-                    className="mb-2 text-2xl font-bold"
-                    initial={{ y: 20 }}
-                    whileHover={{ y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    My Story
-                  </motion.h3>
-                  <motion.p 
-                    className="text-white/80"
-                    initial={{ opacity: 0.8 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    Watch how I turned my passion into profession
-                  </motion.p>
-                </motion.div>
               </motion.div>
             </div>
 
