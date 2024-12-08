@@ -142,30 +142,75 @@ function About() {
 
               {/* Video introduction */}
               <motion.div 
-                className="relative overflow-hidden aspect-video rounded-xl group"
+                className="relative overflow-hidden cursor-pointer aspect-video rounded-xl group"
                 variants={scaleInVariants}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ 
+                  scale: 1.02,
+                  transition: {
+                    duration: 0.3,
+                    ease: "easeOut"
+                  }
+                }}
                 key={contentControls ? "visible" : "hidden"}
               >
-                <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/60 to-transparent" />
-                <video
-                  className="object-cover w-full h-full"
+                {/* Gradient overlay */}
+                <motion.div 
+                  className="absolute inset-0 z-10 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+                  initial={{ opacity: 0.7 }}
+                  whileHover={{ opacity: 0.4 }}
+                  transition={{ duration: 0.3 }}
+                />
+
+                {/* Video element */}
+                <motion.video
+                  className="object-cover w-full h-full transform-gpu"
                   poster="/video-thumbnail.jpg"
                   autoPlay
                   muted
                   loop
                   loading="lazy"
+                  initial={{ scale: 1 }}
+                  whileHover={{ 
+                    scale: 1.1,
+                    transition: {
+                      duration: 0.5,
+                      ease: [0.33, 1, 0.68, 1]  // Custom easing for smoother motion
+                    }
+                  }}
                 >
                   <source src="/111.mp4" type="video/mp4" />
-                  <p>Your browser doesn't support HTML5 video.</p>
-                </video>
+                  <p>Your browser doesn&apos;t support HTML5 video.</p>
+                </motion.video>
+
+                {/* Text overlay */}
                 <motion.div 
                   className="absolute bottom-0 left-0 right-0 z-20 p-6 text-white"
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  whileHover={{ 
+                    y: -5,
+                    transition: {
+                      duration: 0.3,
+                      ease: "easeOut"
+                    }
+                  }}
                 >
-                  <h3 className="mb-2 text-2xl font-bold">My Story</h3>
-                  <p className="text-white/80">Watch how I turned my passion into profession</p>
+                  <motion.h3 
+                    className="mb-2 text-2xl font-bold"
+                    initial={{ y: 20 }}
+                    whileHover={{ y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    My Story
+                  </motion.h3>
+                  <motion.p 
+                    className="text-white/80"
+                    initial={{ opacity: 0.8 }}
+                    whileHover={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    Watch how I turned my passion into profession
+                  </motion.p>
                 </motion.div>
               </motion.div>
             </div>
@@ -218,8 +263,7 @@ function About() {
                     <span className="text-xl">{item.icon}</span>
                   </div>
                   <motion.div 
-                    className="p-4 transition-all duration-300 bg-white/5 backdrop-blur-sm 
-                      rounded-xl hover:bg-white/10"
+                    className="p-4 transition-all duration-300 bg-white/5 backdrop-blur-sm rounded-xl hover:bg-white/10"
                     whileHover={{ 
                       x: 10,
                       transition: { type: "spring", stiffness: 200 }
@@ -261,8 +305,7 @@ function About() {
             {values.map((value, index) => (
               <motion.div
                 key={`${value.title}-${valuesControls ? "visible" : "hidden"}`}
-                className="group relative p-8 overflow-hidden rounded-2xl bg-white/5 backdrop-blur-sm 
-                  border border-white/10 transform-gpu hover:border-[#6DBE45]/50 transition-colors duration-300"
+                className="relative p-6 overflow-hidden border sm:p-8 group rounded-2xl bg-white/5 backdrop-blur-sm border-white/10 transform-gpu"
                 variants={{
                   hidden: { 
                     opacity: 0, 
@@ -282,56 +325,91 @@ function About() {
                   }
                 }}
                 whileHover={{ 
-                  y: -5,
+                  scale: 1.02,
                   transition: { 
-                    duration: 0.2, 
-                    ease: "easeOut" 
+                    duration: 0.2,
+                    ease: "easeOut"
                   }
                 }}
               >
-                {/* Background Gradient */}
-                <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
-                  style={{ background: value.color }}
-                />
+                {/* Animated Border */}
+                <motion.div
+                  className="absolute inset-0 opacity-0 rounded-2xl group-hover:opacity-100"
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="absolute inset-0" 
+                    style={{
+                      background: `linear-gradient(90deg, transparent, ${value.color.split(' ')[4]}, transparent)`,
+                      animation: 'shimmer 2s linear infinite',
+                    }}
+                  />
+                </motion.div>
 
                 {/* Content Container */}
                 <div className="relative z-10">
                   {/* Icon Container */}
                   <motion.div 
-                    className="flex items-center justify-center w-16 h-16 mb-6 text-4xl rounded-full 
-                      bg-white/5 group-hover:bg-white/10 transition-colors duration-300"
+                    className="flex items-center justify-center w-12 h-12 mb-4 text-3xl rounded-full 
+                      sm:w-16 sm:h-16 sm:mb-6 sm:text-4xl bg-white/5 group-hover:bg-[#6DBE45]/10 
+                      transition-colors duration-300"
                     whileHover={{ 
-                      rotate: 360,
                       scale: 1.1,
+                      rotate: 360,
                       transition: { 
-                        duration: 0.6, 
-                        ease: "easeOut" 
+                        type: "spring",
+                        stiffness: 200,
+                        damping: 10
                       }
                     }}
                   >
-                    <span className="group-hover:scale-110 transition-transform duration-300">
+                    <span className="transition-transform duration-300 transform-gpu group-hover:scale-110">
                       {value.icon}
                     </span>
                   </motion.div>
 
                   {/* Text Content */}
-                  <div className="transform transition-transform duration-300 group-hover:translate-y-[-2px]">
-                    <h4 className="mb-3 text-2xl font-bold text-white group-hover:text-[#6DBE45] 
-                      transition-colors duration-300">
+                  <motion.div
+                    initial={{ y: 0 }}
+                    whileHover={{ y: -2 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <h4 className="mb-2 text-xl font-bold text-white sm:mb-3 sm:text-2xl 
+                      group-hover:text-[#6DBE45] transition-colors duration-300">
                       {value.title}
                     </h4>
-                    <p className="leading-relaxed text-white/70 group-hover:text-white/90 
-                      transition-colors duration-300">
+                    <p className="text-sm leading-relaxed transition-colors duration-300 sm:text-base text-white/70 group-hover:text-white/90">
                       {value.description}
                     </p>
-                  </div>
+                  </motion.div>
                 </div>
+
+                {/* Hover Glow Effect */}
+                <motion.div
+                  className="absolute inset-0 transition-opacity duration-300 opacity-0 -z-10 group-hover:opacity-100 blur-2xl"
+                  style={{
+                    background: value.color,
+                    opacity: 0.1
+                  }}
+                />
               </motion.div>
             ))}
           </div>
         </motion.div>
       </div>
+
+      {/* Add this to your global CSS */}
+      <style jsx global>{`
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
     </motion.section>
   )
 }
