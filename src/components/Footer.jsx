@@ -1,3 +1,7 @@
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+
 import { useState } from 'react'
 
 function Footer() {
@@ -14,12 +18,17 @@ function Footer() {
   const socials = [
     { 
       name: 'GitHub',
-      url: '#github',
+      url: 'https://github.com/VenujaVP',
       icon: '...' // SVG path for GitHub icon
     },
     { 
       name: 'LinkedIn',
-      url: '#linkedin',
+      url: 'https://linkedin.com/company/nova-boost',
+      icon: '...' // SVG path for LinkedIn icon
+    },
+    { 
+      name: 'LinkedIn',
+      url: 'https://linkedin.com/in/venuja-v11',
       icon: '...' // SVG path for LinkedIn icon
     },
     // ... other social media icons

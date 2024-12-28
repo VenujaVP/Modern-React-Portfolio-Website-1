@@ -1,3 +1,7 @@
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+
 import { useState, useRef, useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
@@ -206,16 +210,16 @@ function Projects() {
         />
       </motion.div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* Title and category filters */}
         <motion.div 
-          className="text-center mb-16"
+          className="mb-16 text-center"
           variants={containerVariants}
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
           <motion.h2 
-            className="text-5xl lg:text-6xl font-bold text-white mb-6"
+            className="mb-6 text-5xl font-bold text-white lg:text-6xl"
             variants={itemVariants}
           >
             Our <span className="text-[#6DBE45]">Projects</span>
@@ -276,7 +280,7 @@ function Projects() {
             {/* Scrollable project list */}
             <div 
               ref={carouselRef}
-              className="flex overflow-x-auto gap-4 sm:gap-8 snap-x snap-mandatory hide-scrollbar pb-12"
+              className="flex gap-4 pb-12 overflow-x-auto sm:gap-8 snap-x snap-mandatory hide-scrollbar"
             >
               {filteredProjects.map((project, index) => (
                 // Individual project card
@@ -298,11 +302,11 @@ function Projects() {
                   }}
                 >
                   {/* Project Image */}
-                  <div className="relative aspect-video overflow-hidden rounded-t-xl">
+                  <div className="relative overflow-hidden aspect-video rounded-t-xl">
                     <motion.img
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-full object-cover"
+                      className="object-cover w-full h-full"
                       initial={{ scale: 1 }}
                       whileHover={{ 
                         scale: 1.1,
@@ -317,7 +321,7 @@ function Projects() {
 
                   {/* Project Info */}
                   <motion.div 
-                    className="p-4 sm:p-6 md:p-8 space-y-3 sm:space-y-4"
+                    className="p-4 space-y-3 sm:p-6 md:p-8 sm:space-y-4"
                     initial={{ opacity: 0.9 }}
                     whileHover={{ opacity: 1 }}
                     transition={{ duration: 0.2 }}
@@ -328,7 +332,7 @@ function Projects() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-xl sm:text-2xl font-bold text-white">
+                    <h3 className="text-xl font-bold text-white sm:text-2xl">
                       {project.title}
                     </h3>
 
@@ -342,8 +346,7 @@ function Projects() {
                       {project.tags.map(tag => (
                         <span
                           key={tag}
-                          className="px-2 py-1 text-xs sm:text-sm bg-white/5 text-white/80 rounded-full
-                            border border-white/10 whitespace-nowrap"
+                          className="px-2 py-1 text-xs border rounded-full sm:text-sm bg-white/5 text-white/80 border-white/10 whitespace-nowrap"
                         >
                           {tag}
                         </span>
