@@ -1,3 +1,7 @@
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+
 import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import useAnimateOnScroll, { fadeInUpVariants, staggerChildrenVariants, scaleInVariants } from '../hooks/useAnimateOnScroll'
@@ -160,7 +164,7 @@ function About() {
                 
                 {/* Story description */}
                 <motion.p 
-                  className="text-lg text-white/80 max-w-2xl"
+                  className="max-w-2xl text-lg text-white/80"
                   variants={fadeInUpVariants}
                 >
                   Watch how I turned my passion into profession. With {stats[2].number} years of experience 
@@ -213,11 +217,10 @@ function About() {
                 </motion.video>
 
                 {/* Video Progress Bar - Moved up and made interactive */}
-                <div className="absolute bottom-16 left-0 right-0 z-30 px-4 opacity-0 group-hover:opacity-100 
-                  transition-opacity duration-300">
+                <div className="absolute left-0 right-0 z-30 px-4 transition-opacity duration-300 opacity-0 bottom-16 group-hover:opacity-100">
                   {/* Progress Bar Container */}
                   <div 
-                    className="w-full h-2 bg-white/20 rounded-full cursor-pointer relative"
+                    className="relative w-full h-2 rounded-full cursor-pointer bg-white/20"
                     onClick={(e) => {
                       const bounds = e.currentTarget.getBoundingClientRect()
                       const x = e.clientX - bounds.left
@@ -253,8 +256,7 @@ function About() {
                 </div>
 
                 {/* Video Controls */}
-                <div className="absolute bottom-4 left-0 right-0 z-30 px-4 opacity-0 group-hover:opacity-100 
-                  transition-opacity duration-300 bg-gradient-to-t from-black/60 to-transparent">
+                <div className="absolute left-0 right-0 z-30 px-4 transition-opacity duration-300 opacity-0 bottom-4 group-hover:opacity-100 bg-gradient-to-t from-black/60 to-transparent">
                   <div className="flex items-center justify-between">
                     {/* Left Controls */}
                     <div className="flex items-center gap-4">
@@ -267,7 +269,7 @@ function About() {
                             video.pause()
                           }
                         }}
-                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                        className="p-2 transition-colors rounded-full bg-white/10 hover:bg-white/20"
                       >
                         <svg 
                           className="w-5 h-5 text-white" 
@@ -312,7 +314,7 @@ function About() {
                             video.muted = !video.muted
                           }
                         }}
-                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                        className="p-2 transition-colors rounded-full bg-white/10 hover:bg-white/20"
                       >
                         <svg 
                           className="w-5 h-5 text-white" 
